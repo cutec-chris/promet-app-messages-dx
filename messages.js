@@ -1,5 +1,5 @@
 var Messages;
-dhtmlxEvent(window,"load",function(){
+window.addEventListener('AfterLogin',function(){
   Messages = newPrometList('message','Nachrichten');
   Messages.Layout = Messages.Page.attachLayout('2E');
   var a = Messages.Layout.cells('a');
