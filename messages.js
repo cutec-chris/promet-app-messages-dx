@@ -38,26 +38,17 @@ window.addEventListener('AfterLogin',function(){
     OpenElement('message',Messages.Grid.getSelectedRowId(),Messages);
   });
   Messages.Grid.attachEvent("onRowSelect",function(){
-    var aURL = '/'+Messages.TableName+'/by-id/'+Messages.Grid.getSelectedRowId()+'/item.json';
+    var aURL = '/'+Messages.TableName+'/blobdata/data/'+Messages.Grid.getSelectedRowId()+'.dat';
     if (window.LoadData(aURL,function(aData){
-      console.log("Data loaded");
       try {
         if ((aData)&&(aData.xmlDoc))
         var aData2;
         var aID;
-        if (aData.xmlDoc.responseText != '')
-          aData2 = JSON.parse(aData.xmlDoc.responseText);
-        if (aData2) {
-          Messages.Layout.cells('b').attachHTMLString(aData2.id);
-          if (aData2.CONTENT) {
-            //load message Content
-          }
-        }
+        Messages.Layout.cells('b').attachHTMLString(aData.xmlDoc.responseText);
       } catch(err) {
         console.log(Messages.TableName,'failed to load data !',err);
       }
     })==true) {
-      console.log("Data loading...");
     }
     else {
       if (Callback)
