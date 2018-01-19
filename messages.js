@@ -73,3 +73,10 @@ window.addEventListener('AfterLogin',function(){
     aForm.Tabs.tabs("content").progressOn();
   }
 });
+window.addEventListener('AfterLogout',function(){
+  Messages.Grid.destructor();
+  Messages.Page.remove();
+  delete Messages;
+  Messages = {};
+  Messages = null;
+});
