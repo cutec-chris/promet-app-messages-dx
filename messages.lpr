@@ -32,9 +32,10 @@ var
   begin
     if aValue.Status=200 then
       begin
+        Messages.Page.cells('b').detachObject(true);
         aDiv := document.createElement('div');
-        aDiv.innerHTML:=aValue.responseText;
-        Messages.Page.cells('b').attachObject(aDiv);
+        aDiv.innerHTML:='<pre>'+aValue.responseText+'</pre>';
+        Messages.Page.cells('b').appendObject(aDiv);
         Messages.Page.cells('b').expand;
       end
     else

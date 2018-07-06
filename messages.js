@@ -14,9 +14,10 @@
       var Result = undefined;
       var aDiv = null;
       if (aValue.status === 200) {
+        $mod.Messages.Page.cells("b").detachObject(true);
         aDiv = document.createElement("div");
-        aDiv.innerHTML = aValue.responseText;
-        $mod.Messages.Page.cells("b").attachObject(aDiv);
+        aDiv.innerHTML = ("<pre>" + aValue.responseText) + "<\/pre>";
+        $mod.Messages.Page.cells("b").appendObject(aDiv);
         $mod.Messages.Page.cells("b").expand();
       } else {
         throw pas.SysUtils.Exception.$create("Create$1",[aValue.responseText]);
