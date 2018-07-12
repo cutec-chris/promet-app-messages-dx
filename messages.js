@@ -31,9 +31,9 @@
     };
     if ($mod.Messages === null) {
       aParent = rtl.getObject(pas.Avamm.GetAvammContainer());
-      $mod.Messages = pas.AvammForms.TAvammListForm.$create("Create$1",[aParent,"message","2E"]);
+      $mod.Messages = pas.AvammForms.TAvammListForm.$create("Create$2",[aParent,"message","2E"]);
       var $with1 = $mod.Messages;
-      $with1.Grid.setHeader("Betreff,Von,Datum",",",Array.of({}));
+      $with1.Grid.setHeader("Betreff,Von,Datum");
       $with1.Grid.setColumnIds("SUBJECT,SENDER,SENDDATE");
       $with1.Grid.attachHeader("#text_filter,#text_filter,#text_filter");
       $with1.Grid.setInitWidths("*,150,100");

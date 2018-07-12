@@ -57,7 +57,7 @@ begin
       Messages := TAvammListForm.Create(aParent,'message','2E');
       with Messages do
         begin
-          Grid.setHeader('Betreff,Von,Datum',',',TJSArray._of([]));
+          Grid.setHeader('Betreff,Von,Datum');
           Grid.setColumnIds('SUBJECT,SENDER,SENDDATE');
           Grid.attachHeader('#text_filter,#text_filter,#text_filter');
           Grid.setInitWidths('*,150,100');
