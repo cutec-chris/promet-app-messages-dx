@@ -59,8 +59,8 @@ begin
         begin
           Grid.setHeader('Betreff,Von,Datum');
           Grid.setColumnIds('SUBJECT,SENDER,SENDDATE');
-          Grid.attachHeader('#text_filter,#text_filter,#text_filter');
           Grid.setInitWidths('*,150,100');
+          FilterHeader := '#text_filter,#text_filter,#text_filter';
           Grid.init();
           Page.cells('b').collapse;
           Page.cells('b').setText(strMessage);

@@ -35,8 +35,8 @@
       var $with1 = $mod.Messages;
       $with1.Grid.setHeader("Betreff,Von,Datum");
       $with1.Grid.setColumnIds("SUBJECT,SENDER,SENDDATE");
-      $with1.Grid.attachHeader("#text_filter,#text_filter,#text_filter");
       $with1.Grid.setInitWidths("*,150,100");
+      $with1.SetFilterHeader("#text_filter,#text_filter,#text_filter");
       $with1.Grid.init();
       $with1.Page.cells("b").collapse();
       $with1.Page.cells("b").setText(rtl.getResStr(pas.messages,"strMessage"));
