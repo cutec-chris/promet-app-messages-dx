@@ -46,7 +46,7 @@
   };
   $mod.$resourcestrings = {strMessage: {org: "Nachricht"}, strMessages: {org: "Nachrichten"}};
   $mod.$init = function () {
-    if (pas.Avamm.getRight("Messages") > 0) pas.Avamm.RegisterSidebarRoute(rtl.getResStr(pas.messages,"strMessages"),"messages",$mod.ShowMessagesList);
+    if (pas.Avamm.getRight("Messages") > 0) pas.Avamm.RegisterSidebarRoute(rtl.getResStr(pas.messages,"strMessages"),"messages",$mod.ShowMessagesList,"fa-envelope");
     pas.webrouter.Router().RegisterRoute("\/messages\/by-id\/:Id\/",$mod.ShowMessages,false);
   };
 });

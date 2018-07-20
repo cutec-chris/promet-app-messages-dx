@@ -72,7 +72,7 @@ end;
 
 initialization
   if getRight('Messages')>0 then
-    RegisterSidebarRoute(strMessages,'messages',@ShowMessagesList);
+    RegisterSidebarRoute(strMessages,'messages',@ShowMessagesList,'fa-envelope');
   Router.RegisterRoute('/messages/by-id/:Id/',@ShowMessages);
 end.
 
