@@ -2,6 +2,14 @@
   "use strict";
   var $mod = this;
   rtl.createClass($mod,"TMessagesForm",pas.AvammForms.TAvammForm,function () {
+    this.Create$1 = function (mode, aDataSet, Id, Params) {
+      pas.AvammForms.TAvammForm.Create$1.call(this,mode,aDataSet,Id,Params);
+    };
+    this.ToolbarButtonClick = function (id) {
+      if (id === "new") {
+        $mod.ShowMessages("\/messages\/new",null,null);
+      } else pas.AvammForms.TAvammForm.ToolbarButtonClick.call(this,id);
+    };
   });
   this.Messages = null;
   this.ShowMessages = function (URl, aRoute, Params) {
@@ -27,7 +35,7 @@
     function GridRowSelected(id) {
       var aURL = "";
       aURL = ("\/message\/blobdata\/data\/" + ("" + $mod.Messages.Grid.getSelectedRowId())) + ".dat";
-      pas.Avamm.LoadData(aURL,false,"text\/json",6000).then(MessageLoaded);
+      pas.Avamm.LoadData(aURL,false,"",6000).then(MessageLoaded);
     };
     if ($mod.Messages === null) {
       aParent = rtl.getObject(pas.Avamm.GetAvammContainer());
@@ -41,6 +49,7 @@
       $with1.Page.cells("b").collapse();
       $with1.Page.cells("b").setText(rtl.getResStr(pas.messages,"strMessage"));
       $with1.Grid.attachEvent("onRowSelect",GridRowSelected);
+      $with1.Toolbar.addButton("new",0,"","fa fa-plus-circle");
     };
     $mod.Messages.Show();
   };

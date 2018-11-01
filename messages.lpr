@@ -6,7 +6,12 @@ type
 
   { TStatisticsForm }
 
+  { TMessagesForm }
+
   TMessagesForm = class(TAvammForm)
+    constructor Create(mode: TAvammFormMode; aDataSet: string; Id: JSValue;
+  Params: string=''); override;
+    procedure ToolbarButtonClick(id: string); override;
   end;
 
 resourcestring
@@ -65,10 +70,29 @@ begin
           Page.cells('b').collapse;
           Page.cells('b').setText(strMessage);
           Grid.attachEvent('onRowSelect',@GridRowSelected);
+          Toolbar.addButton('new',0,'','fa fa-plus-circle');
         end;
     end;
   Messages.Show;
 end;
+
+constructor TMessagesForm.Create(mode: TAvammFormMode; aDataSet: string;
+  Id: JSValue; Params: string);
+begin
+  inherited Create(mode, aDataSet, Id, Params);
+end;
+
+procedure TMessagesForm.ToolbarButtonClick(id: string);
+begin
+  if id = 'new' then
+    begin
+      ShowMessages('/messages/new',nil,nil);
+    end
+  else
+    inherited ToolbarButtonClick(id);
+end;
+
+{ TMessagesForm }
 
 initialization
   if getRight('Messages')>0 then
