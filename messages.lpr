@@ -11,6 +11,10 @@ type
   TMessagesForm = class(TAvammForm)
     constructor Create(mode: TAvammFormMode; aDataSet: string; Id: JSValue;
   Params: string=''); override;
+  end;
+
+  TMessagesList = class(TAvammListForm)
+  protected
     procedure ToolbarButtonClick(id: string); override;
   end;
 
@@ -23,8 +27,11 @@ var
 Procedure ShowMessages(URl : String; aRoute : TRoute; Params: TStrings);
 var
   aForm: TAvammForm;
+  tmp: String;
 begin
-  aForm := TMessagesForm.Create(fmInlineWindow,'message',Params.Values['Id']);
+  if Assigned(Params) then
+    tmp := Params.Values['Id'];
+  aForm := TMessagesForm.Create(fmInlineWindow,'message',tmp);
 end;
 
 
@@ -47,6 +54,7 @@ var
       begin
         raise Exception.Create(aValue.responseText);
       end;
+    Messages.Page.cells('b').progressOff;
   end;
   procedure GridRowSelected(id : string);
   var
@@ -54,12 +62,13 @@ var
   begin
     aURL := '/message/blobdata/data/'+string(Messages.Grid.getSelectedRowId())+'.dat';
     LoadData(aurl)._then(TJSPromiseResolver(@MessageLoaded));
+    Messages.Page.cells('b').progressOn;
   end;
 begin
   if Messages = nil then
     begin
       aParent := TJSHTMLElement(GetAvammContainer());
-      Messages := TAvammListForm.Create(aParent,'message','2E');
+      Messages := TMessagesList.Create(aParent,'message','2E');
       with Messages do
         begin
           Grid.setHeader('Betreff,Von,Datum');
@@ -82,11 +91,11 @@ begin
   inherited Create(mode, aDataSet, Id, Params);
 end;
 
-procedure TMessagesForm.ToolbarButtonClick(id: string);
+procedure TMessagesList.ToolbarButtonClick(id: string);
 begin
-  if id = 'new' then
+  if (id = 'new') then
     begin
-      ShowMessages('/messages/new',nil,nil);
+      ShowMessages('/messages/by-id/new',nil,nil);
     end
   else
     inherited ToolbarButtonClick(id);

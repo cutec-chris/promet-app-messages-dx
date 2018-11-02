@@ -5,16 +5,20 @@
     this.Create$1 = function (mode, aDataSet, Id, Params) {
       pas.AvammForms.TAvammForm.Create$1.call(this,mode,aDataSet,Id,Params);
     };
+  });
+  rtl.createClass($mod,"TMessagesList",pas.AvammForms.TAvammListForm,function () {
     this.ToolbarButtonClick = function (id) {
       if (id === "new") {
-        $mod.ShowMessages("\/messages\/new",null,null);
-      } else pas.AvammForms.TAvammForm.ToolbarButtonClick.call(this,id);
+        $mod.ShowMessages("\/messages\/by-id\/new",null,null);
+      } else pas.AvammForms.TAvammListForm.ToolbarButtonClick.call(this,id);
     };
   });
   this.Messages = null;
   this.ShowMessages = function (URl, aRoute, Params) {
     var aForm = null;
-    aForm = $mod.TMessagesForm.$create("Create$1",[pas.AvammForms.TAvammFormMode.fmInlineWindow,"message",Params.GetValue("Id"),""]);
+    var tmp = "";
+    if (Params != null) tmp = Params.GetValue("Id");
+    aForm = $mod.TMessagesForm.$create("Create$1",[pas.AvammForms.TAvammFormMode.fmInlineWindow,"message",tmp,""]);
   };
   this.ShowMessagesList = function (URl, aRoute, Params) {
     var aParent = null;
@@ -30,16 +34,18 @@
       } else {
         throw pas.SysUtils.Exception.$create("Create$1",[aValue.responseText]);
       };
+      $mod.Messages.Page.cells("b").progressOff();
       return Result;
     };
     function GridRowSelected(id) {
       var aURL = "";
       aURL = ("\/message\/blobdata\/data\/" + ("" + $mod.Messages.Grid.getSelectedRowId())) + ".dat";
       pas.Avamm.LoadData(aURL,false,"",6000).then(MessageLoaded);
+      $mod.Messages.Page.cells("b").progressOn();
     };
     if ($mod.Messages === null) {
       aParent = rtl.getObject(pas.Avamm.GetAvammContainer());
-      $mod.Messages = pas.AvammForms.TAvammListForm.$create("Create$2",[aParent,"message","2E"]);
+      $mod.Messages = $mod.TMessagesList.$create("Create$2",[aParent,"message","2E"]);
       var $with1 = $mod.Messages;
       $with1.Grid.setHeader("Betreff,Von,Datum");
       $with1.Grid.setColumnIds("SUBJECT,SENDER,SENDDATE");
