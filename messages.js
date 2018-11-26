@@ -4,6 +4,30 @@
   rtl.createClass($mod,"TMessagesForm",pas.AvammForms.TAvammForm,function () {
     this.Create$1 = function (mode, aDataSet, Id, Params) {
       pas.AvammForms.TAvammForm.Create$1.call(this,mode,aDataSet,Id,Params);
+      this.Toolbar.addButton("send",0,"Senden","fa fa-send");
+      this.SetTitle(rtl.getResStr(pas.messages,"strNewMessage"));
+    };
+    this.ToolbarButtonClick = function (id) {
+      var Self = this;
+      var aUrl = "";
+      var aContent = "";
+      var MessageFields = null;
+      function MessageSaved(aValue) {
+        var Result = undefined;
+        Self.Toolbar.enableItem("send");
+        if (aValue.status === 200) {
+          Self.DoClose();
+        } else throw pas.SysUtils.Exception.$create("Create$1",[aValue.responseText]);
+        return Result;
+      };
+      if (id === "send") {
+        Self.Toolbar.disableItem("send");
+        aUrl = "\/message\/by-id\/" + ("" + $mod.Messages.Grid.getSelectedRowId());
+        aContent = "";
+        MessageFields = new Object();
+        MessageFields["summary"] = "Test";
+        pas.Avamm.StoreData(aUrl,JSON.stringify(MessageFields),false,"",6000).then(MessageSaved);
+      } else pas.AvammForms.TAvammForm.ToolbarButtonClick.call(Self,id);
     };
   });
   rtl.createClass($mod,"TMessagesList",pas.AvammForms.TAvammListForm,function () {
@@ -59,7 +83,7 @@
     };
     $mod.Messages.Show();
   };
-  $mod.$resourcestrings = {strMessage: {org: "Nachricht"}, strMessages: {org: "Nachrichten"}};
+  $mod.$resourcestrings = {strMessage: {org: "Nachricht"}, strMessages: {org: "Nachrichten"}, strNewMessage: {org: "Neue Nachricht"}};
   $mod.$init = function () {
     if (pas.Avamm.getRight("Messages") > 0) pas.Avamm.RegisterSidebarRoute(rtl.getResStr(pas.messages,"strMessages"),"messages",$mod.ShowMessagesList,"fa-envelope");
     pas.webrouter.Router().RegisterRoute("\/messages\/by-id\/:Id\/",$mod.ShowMessages,false);

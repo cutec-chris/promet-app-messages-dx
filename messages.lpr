@@ -11,6 +11,7 @@ type
   TMessagesForm = class(TAvammForm)
     constructor Create(mode: TAvammFormMode; aDataSet: string; Id: JSValue;
   Params: string=''); override;
+    procedure ToolbarButtonClick(id : string);override;
   end;
 
   TMessagesList = class(TAvammListForm)
@@ -21,6 +22,7 @@ type
 resourcestring
   strMessage              = 'Nachricht';
   strMessages             = 'Nachrichten';
+  strNewMessage           = 'Neue Nachricht';
 
 var
   Messages : TAvammListForm = nil;
@@ -89,6 +91,39 @@ constructor TMessagesForm.Create(mode: TAvammFormMode; aDataSet: string;
   Id: JSValue; Params: string);
 begin
   inherited Create(mode, aDataSet, Id, Params);
+  Toolbar.addButton('send',0,'Senden','fa fa-send');
+  SetTitle(strNewMessage);
+end;
+
+procedure TMessagesForm.ToolbarButtonClick(id: string);
+var
+  aUrl : string;
+  aContent : string;
+  MessageFields: TJSObject;
+
+  function MessageSaved(aValue: TJSXMLHttpRequest): JSValue;
+  begin
+    Toolbar.enableItem('send');
+    if aValue.Status=200 then
+      begin
+        DoClose;
+      end
+    else
+      raise Exception.Create(aValue.responseText);
+  end;
+
+begin
+  if id = 'send' then
+    begin
+      Toolbar.disableItem('send');
+      aURL := '/message/by-id/'+string(Messages.Grid.getSelectedRowId());
+      aContent := '';
+      MessageFields := TJSObject.new;
+      MessageFields.Properties['summary'] := 'Test';
+      StoreData(aurl,TJSJSON.stringify(MessageFields))._then(TJSPromiseResolver(@MessageSaved));
+    end
+  else
+  inherited ToolbarButtonClick(id);
 end;
 
 procedure TMessagesList.ToolbarButtonClick(id: string);
