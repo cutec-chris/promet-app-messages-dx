@@ -1,4 +1,5 @@
 library messages;
+
   uses js, web, classes, Avamm, webrouter, AvammForms, dhtmlx_base,
     dhtmlx_form,SysUtils, Types;
 
@@ -12,6 +13,7 @@ type
     constructor Create(mode: TAvammFormMode; aDataSet: string; Id: JSValue;
   Params: string=''); override;
     procedure ToolbarButtonClick(id : string);override;
+    procedure DoSave; override;
   end;
 
   TMessagesList = class(TAvammListForm)
@@ -99,7 +101,8 @@ procedure TMessagesForm.ToolbarButtonClick(id: string);
 var
   aUrl : string;
   aContent : string;
-  MessageFields: TJSObject;
+  MessageFields, Message: TJSObject;
+  ContentFields, Content: TJSObject;
 
   function MessageSaved(aValue: TJSXMLHttpRequest): JSValue;
   begin
@@ -116,14 +119,21 @@ begin
   if id = 'send' then
     begin
       Toolbar.disableItem('send');
-      aURL := '/message/by-id/'+string(Messages.Grid.getSelectedRowId());
-      aContent := '';
+      aURL := '/message/new/item.json';
+      aContent := 'This is a test Content';
       MessageFields := TJSObject.new;
-      MessageFields.Properties['summary'] := 'Test';
-      StoreData(aurl,TJSJSON.stringify(MessageFields))._then(TJSPromiseResolver(@MessageSaved));
+      MessageFields.Properties['subject'] := 'Test';
+      MessageFields.Properties['sender'] := 'Test@testmann.de';
+      Message := js.new(['Fields',MessageFields]);
+      StoreData(aurl,TJSJSON.stringify(Message))._then(TJSPromiseResolver(@MessageSaved));
     end
   else
   inherited ToolbarButtonClick(id);
+end;
+
+procedure TMessagesForm.DoSave;
+begin
+  //prevent to save Message double
 end;
 
 procedure TMessagesList.ToolbarButtonClick(id: string);

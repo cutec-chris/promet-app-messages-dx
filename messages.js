@@ -1,4 +1,4 @@
-﻿rtl.module("messages",["System","JS","Web","Classes","Avamm","webrouter","AvammForms","dhtmlx_base","SysUtils"],function () {
+﻿rtl.module("messages",["System","JS","Web","Classes","Avamm","webrouter","AvammForms","dhtmlx_base","SysUtils","Types"],function () {
   "use strict";
   var $mod = this;
   rtl.createClass($mod,"TMessagesForm",pas.AvammForms.TAvammForm,function () {
@@ -12,6 +12,7 @@
       var aUrl = "";
       var aContent = "";
       var MessageFields = null;
+      var Message = null;
       function MessageSaved(aValue) {
         var Result = undefined;
         Self.Toolbar.enableItem("send");
@@ -22,12 +23,16 @@
       };
       if (id === "send") {
         Self.Toolbar.disableItem("send");
-        aUrl = "\/message\/by-id\/" + ("" + $mod.Messages.Grid.getSelectedRowId());
+        aUrl = "\/message\/new\/item.json";
         aContent = "";
         MessageFields = new Object();
-        MessageFields["summary"] = "Test";
-        pas.Avamm.StoreData(aUrl,JSON.stringify(MessageFields),false,"",6000).then(MessageSaved);
+        MessageFields["subject"] = "Test";
+        MessageFields["sender"] = "Test@testmann.de";
+        Message = pas.JS.New(["Fields",MessageFields]);
+        pas.Avamm.StoreData(aUrl,JSON.stringify(Message),false,"",6000).then(MessageSaved);
       } else pas.AvammForms.TAvammForm.ToolbarButtonClick.call(Self,id);
+    };
+    this.DoSave = function () {
     };
   });
   rtl.createClass($mod,"TMessagesList",pas.AvammForms.TAvammListForm,function () {
@@ -42,7 +47,7 @@
     var aForm = null;
     var tmp = "";
     if (Params != null) tmp = Params.GetValue("Id");
-    aForm = $mod.TMessagesForm.$create("Create$1",[pas.AvammForms.TAvammFormMode.fmInlineWindow,"message",tmp,""]);
+    aForm = $mod.TMessagesForm.$create("Create$1",[2,"message",tmp,""]);
   };
   this.ShowMessagesList = function (URl, aRoute, Params) {
     var aParent = null;
