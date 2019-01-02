@@ -101,15 +101,29 @@ procedure TMessagesForm.ToolbarButtonClick(id: string);
 var
   aUrl : string;
   aContent : string;
+  aId : string;
   MessageFields, Message: TJSObject;
   ContentFields, Content: TJSObject;
 
-  function MessageSaved(aValue: TJSXMLHttpRequest): JSValue;
+  function MessageSaved2(aValue: TJSXMLHttpRequest): JSValue;
   begin
     Toolbar.enableItem('send');
     if aValue.Status=200 then
       begin
         DoClose;
+      end
+    else
+      raise Exception.Create(aValue.responseText);
+    DoClose;
+  end;
+  function MessageSaved(aValue: TJSXMLHttpRequest): JSValue;
+  begin
+    if aValue.Status=200 then
+      begin
+        //get id
+        Content := js.new(['Fields',ContentFields]);
+        aURL := '/message/blobdata/data/'+aId+'.dat';
+        StoreData(aurl,TJSJSON.stringify(Message))._then(TJSPromiseResolver(@MessageSaved2));
       end
     else
       raise Exception.Create(aValue.responseText);

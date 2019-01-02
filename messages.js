@@ -11,20 +11,33 @@
       var Self = this;
       var aUrl = "";
       var aContent = "";
+      var aId = "";
       var MessageFields = null;
       var Message = null;
-      function MessageSaved(aValue) {
+      var ContentFields = null;
+      var Content = null;
+      function MessageSaved2(aValue) {
         var Result = undefined;
         Self.Toolbar.enableItem("send");
         if (aValue.status === 200) {
           Self.DoClose();
+        } else throw pas.SysUtils.Exception.$create("Create$1",[aValue.responseText]);
+        Self.DoClose();
+        return Result;
+      };
+      function MessageSaved(aValue) {
+        var Result = undefined;
+        if (aValue.status === 200) {
+          Content = pas.JS.New(["Fields",ContentFields]);
+          aUrl = ("\/message\/blobdata\/data\/" + aId) + ".dat";
+          pas.Avamm.StoreData(aUrl,JSON.stringify(Message),false,"",6000).then(MessageSaved2);
         } else throw pas.SysUtils.Exception.$create("Create$1",[aValue.responseText]);
         return Result;
       };
       if (id === "send") {
         Self.Toolbar.disableItem("send");
         aUrl = "\/message\/new\/item.json";
-        aContent = "";
+        aContent = "This is a test Content";
         MessageFields = new Object();
         MessageFields["subject"] = "Test";
         MessageFields["sender"] = "Test@testmann.de";
