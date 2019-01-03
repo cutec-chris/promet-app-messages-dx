@@ -121,6 +121,7 @@ var
     if aValue.Status=200 then
       begin
         //get id
+        aId := aValue.getResponseHeader('UID');
         Content := js.new(['Fields',ContentFields]);
         aURL := '/message/blobdata/data/'+aId+'.dat';
         StoreData(aurl,TJSJSON.stringify(Message))._then(TJSPromiseResolver(@MessageSaved2));

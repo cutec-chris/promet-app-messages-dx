@@ -28,6 +28,7 @@
       function MessageSaved(aValue) {
         var Result = undefined;
         if (aValue.status === 200) {
+          aId = aValue.getResponseHeader("UID");
           Content = pas.JS.New(["Fields",ContentFields]);
           aUrl = ("\/message\/blobdata\/data\/" + aId) + ".dat";
           pas.Avamm.StoreData(aUrl,JSON.stringify(Message),false,"",6000).then(MessageSaved2);
